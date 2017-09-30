@@ -4,17 +4,14 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var sassMiddleware = require('node-sass-middleware');
 
+//bots
+var GDAXbot = require('./bots/GDAXbot');
+// routes
 var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
-
-
-var GDAXbot = require('./bots/GDAXbot');
-
-GDAXbot.initBot();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,14 +23,12 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(sassMiddleware({
-    src: path.join(__dirname, 'public'),
-    dest: path.join(__dirname, 'public'),
-    indentedSyntax: true, // true = .sass and false = .scss
-    sourceMap: true
-}));
 app.use(express.static(path.join(__dirname, 'public')));
 
+//bots
+GDAXbot.initBot();
+
+//routes
 app.use('/', index);
 app.use('/users', users);
 
